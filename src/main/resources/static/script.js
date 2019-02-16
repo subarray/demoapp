@@ -8,6 +8,13 @@ $(function() {
         'catdog' : /^(cat|dog)$/
     }
 
+    $('input').each(function(){
+       if ($(this).val().length === 0)
+          $(this).addClass('empty');
+       else
+          $(this).removeClass('empty');
+    });
+
     $('input').on('focus', function() {
         $(this).addClass('focused');
     });
@@ -39,6 +46,7 @@ $(function() {
 
     $('form').on('submit', function(e) {
         e.preventDefault();
+        e.stopPropagation();
 
         if($('input.invalid').length > 0) {
             $('input.invalid').first().focus();
@@ -51,9 +59,25 @@ $(function() {
         }
 
         $('.vcenter').addClass('submitting');
-        setTimeout(function() {
-            $('.vcenter').removeClass('submitting').addClass('submitted');
-        }, 2000);
+        $('#error').removeClass('show');
+        const name = $('#name').val();
+        $.ajax({
+            type: 'POST',
+            url: '/create',
+            contentType: 'application/json',
+            data: JSON.stringify({name: name, color:$('#color').val(),catdog:$('#catdog').val()}),
+            success: function (res) {
+                console.log('ok', res);
+                $('.vcenter').removeClass('submitting').addClass('submitted');
+            },
+            error: function (err) {
+                $('#error .message').text(err.responseJSON.message);
+                $('#name').focus();
+                $('#error').addClass('show');
+                $('.vcenter').removeClass('submitting');
+                console.log('error', err);
+            }
+        });
     });
 });
 

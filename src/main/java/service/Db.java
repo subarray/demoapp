@@ -1,10 +1,11 @@
 package service;
 
 import java.sql.*;
+import java.io.Closeable;
 import org.apache.commons.dbcp2.BasicDataSource;
 import com.google.gson.Gson;
 
-public class Db {
+public class Db implements Closeable {
 
    private static BasicDataSource pool = new BasicDataSource();
    static {
@@ -44,8 +45,10 @@ public class Db {
       st.executeUpdate(q);
    }
 
-   public void close() throws SQLException {
-      connection.close();
+   public void close() {
+      try {
+         connection.close();
+      } catch(SQLException e) {}
    }
 
 }

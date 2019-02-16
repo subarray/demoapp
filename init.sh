@@ -3,8 +3,8 @@
 apt update
 apt install -y openjdk-8-jdk postgresql-9.5 maven
 
-sudo -u postgres createdb db
-sudo -u postgres createuser ubuntu
+sudo -u postgres createuser -s root
+sudo createdb db
 
 cat > /etc/postgresql/9.5/main/pg_hba.conf << EOF
 local   all             all                                     peer

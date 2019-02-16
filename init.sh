@@ -12,7 +12,7 @@ host    all             all             127.0.0.1/32            trust
 EOF
 
 sudo service postgresql restart
-
+sudo psql -d db < $(dirname "$0")/schema.sql
 sudo ufw default deny incoming
 sudo ufw allow 22/tcp
 sudo ufw allow 80/tcp

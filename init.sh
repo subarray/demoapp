@@ -13,6 +13,8 @@ EOF
 
 sudo service postgresql restart
 sudo psql -d db < $(dirname "$0")/schema.sql
+
+# firewall deny all but
 sudo ufw default deny incoming
 sudo ufw allow 22/tcp
 sudo ufw allow 80/tcp
